@@ -1,23 +1,43 @@
-# Propuesta del Proyecto: Sistema de Quiz
+# Sistema de Quiz 
 
-## 1. Propuesta de API (Endpoints REST)
-El sistema cuenta con una API propia construida en Node.js/Express para manejar las peticiones del cliente:
-* `POST /api/login`: Autentica al usuario verificando credenciales en la base de datos.
-* `GET /api/usuarios`: Devuelve la lista de usuarios para construir la tabla de clasificación (Ranking).
-* `POST /api/puntaje`: Actualiza el puntaje del usuario (solo si el nuevo puntaje supera su récord anterior).
-* `GET /api/preguntas`: Obtiene el banco de preguntas disponible.
-* `POST /api/preguntas`: Añade una nueva pregunta a la base de datos.
-* `DELETE /api/preguntas/:id`: Elimina una pregunta específica.
+Este proyecto es una aplicación web interactiva de preguntas y respuestas (Trivia) desarrollada como parte de la evaluación de la materia. Permite a los usuarios iniciar sesión, contestar cuestionarios, acumular puntos y competir en una tabla de clasificación. Además, cuenta con un panel de administrador para gestionar el banco de preguntas.
 
-## 2. Modelo de Base de Datos (NoSQL Documental)
-Se implementó una base de datos local y persistente basada en un archivo JSON (`database.json`). Es un enfoque NoSQL que permite guardar objetos anidados fácilmente. Consta de dos colecciones principales:
+## Equipo de Desarrollo
+* Santiago Gabriel Flores Ruiz
+* Jonathan Narvaes Morales
+* Jose Palomec
 
-* **Colección `usuarios`**: Almacena `id`, `username`, `password` y el `puntaje` máximo alcanzado.
-* **Colección `preguntas`**: Almacena un `id` único (timestamp), el texto de la `pregunta`, un arreglo (array) con las `opciones` de respuesta, y el índice numérico de la respuesta `correcta`.
+---
 
-## 3. Pantallas del Sistema (Stitch / Flujo UI)
-*(Nota: Ver las imágenes adjuntas en esta misma carpeta)*
+## Características Principales (Cumplimiento de Rúbrica)
 
-1. **Pantalla de Login (`1-login.png`)**: Interfaz inicial. Protege el acceso al sistema. Maneja errores si las credenciales son incorrectas.
-2. **Pantalla de Gestión / Dashboard (`2-dashboard.png`)**: Panel principal. Muestra el usuario activo, la tabla de clasificación (ranking en tiempo real ordenada por puntos), el banco de preguntas para borrarlas y el formulario para inyectar nuevas preguntas mediante la API.
-3. **Pantalla de Juego (`3-juego.png`)**: Oculta el panel de gestión y muestra el cuestionario interactivo. Al enviar las respuestas, calcula el puntaje y llama a la API para actualizar el récord del usuario si aplica.
+El proyecto cumple con los siguientes requerimientos establecidos:
+
+1. **Uso de API Externa:** Integración con Open Trivia Database (OpenTDB) para generar e importar un banco de preguntas y respuestas automáticamente sobre un área de interés.
+2. **Base de Datos:** Almacenamiento persistente de las preguntas, respuestas, usuarios y puntajes.
+3. **API RESTful (Backend):** * CRUD completo para gestionar las preguntas y respuestas.
+   * CRUD para el registro de usuarios y actualización dinámica de puntajes.
+4. **Seguridad y Acceso:** Página de login con validación de credenciales (Diferenciación entre roles de Administrador y Jugador).
+5. **Pruebas Automatizadas:** Implementación de pruebas sobre la interfaz (video) utilizando Playwright.
+
+---
+
+## Tecnologías Utilizadas
+
+* **Frontend:** HTML5, CSS3 (Diseño responsivo sin dependencias externas), Vanilla JavaScript.
+* **Backend:** Node.js con Express.
+* **Integración:** Fetch API para consumo de OpenTDB y comunicación cliente-servidor.
+* **Testing:** Playwright (Pruebas E2E de interfaz de usuario).
+
+---
+
+## Cómo ejecutar el proyecto localmente
+
+### 1. Requisitos previos
+* Tener Node.js instalado en el equipo.
+* Clonar o descargar este repositorio compartido entre los 3 integrantes.
+
+### 2. Instalación
+Abre una terminal en la carpeta raíz del proyecto e instala las dependencias necesarias:
+```bash
+npm install

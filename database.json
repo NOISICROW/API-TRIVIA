@@ -1,0 +1,105 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "admin123",
+      "puntaje": 20
+    },
+    {
+      "id": 2,
+      "username": "santiago",
+      "password": "123",
+      "puntaje": 20
+    }
+  ],
+  "preguntas": [
+    {
+      "id": 1774274829244,
+      "pregunta": "What does the term MIME stand for, in regards to computing?",
+      "opciones": [
+        "Mail Internet Mail Exchange",
+        "Multipurpose Interleave Mail Exchange",
+        "Multipurpose Internet Mail Extensions",
+        "Mail Interleave Method Exchange"
+      ],
+      "correcta": 2
+    },
+    {
+      "id": 1774274829245,
+      "pregunta": "What is the codename of the eighth generation Intel Core micro-architecture launched in October 2017?",
+      "opciones": [
+        "Sandy Bridge",
+        "Skylake",
+        "Coffee Lake",
+        "Broadwell"
+      ],
+      "correcta": 2
+    },
+    {
+      "id": 1774274829246,
+      "pregunta": "In the programming language Java, which of these keywords would you put on a variable to make sure it doesn't get modified?",
+      "opciones": [
+        "Final",
+        "Static",
+        "Private",
+        "Public"
+      ],
+      "correcta": 0
+    },
+    {
+      "id": 1774274829247,
+      "pregunta": "In \"Hexadecimal\", what color would be displayed from the color code? \"#00FF00\"?",
+      "opciones": [
+        "Red",
+        "Blue",
+        "Yellow",
+        "Green"
+      ],
+      "correcta": 3
+    },
+    {
+      "id": 1774274829248,
+      "pregunta": "In computing terms, typically what does CLI stand for?",
+      "opciones": [
+        "Common Language Input",
+        "Control Line Interface",
+        "Command Line Interface",
+        "Common Language Interface"
+      ],
+      "correcta": 2
+    },
+    {
+      "id": 1774274829249,
+      "pregunta": "When Gmail first launched, how much storage did it provide for your email?",
+      "opciones": [
+        "512MB",
+        "5GB",
+        "1GB",
+        "Unlimited"
+      ],
+      "correcta": 2
+    },
+    {
+      "id": 1774274829250,
+      "pregunta": "Laserjet and inkjet printers are both examples of what type of printer?",
+      "opciones": [
+        "Impact printer",
+        "Non-impact printer",
+        "Daisywheel printer",
+        "Dot matrix printer"
+      ],
+      "correcta": 1
+    },
+    {
+      "pregunta": "que significa SQL",
+      "opciones": [
+        "Structured Query Language (Lenguaje de Consulta Estructurada)",
+        "manu ",
+        "rodri"
+      ],
+      "correcta": 0,
+      "id": 1774274913179
+    }
+  ]
+}

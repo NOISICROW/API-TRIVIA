@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App - Proyecto IA</title>
+    <style>
+        /* ESTILOS 100% OFFLINE - No requieren internet para verse bien */
+        :root {
+            --primary: #2563eb; --primary-hover: #1d4ed8;
+            --success: #16a34a; --success-hover: #15803d;
+            --danger: #ef4444; --warning: #eab308;
+            --purple: #9333ea; --purple-hover: #7e22ce;
+            --bg: #f3f4f6; --surface: #ffffff;
+            --text: #1f2937; --text-light: #6b7280; --border: #e5e7eb;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.5; }
+        * { box-sizing: border-box; }
+        h1, h2, h3 { margin-top: 0; }
+        .hidden { display: none !important; }
+        
+        /* Contenedores */
+        .container { max-width: 1000px; margin: 0 auto; }
+        .card { background-color: var(--surface); padding: 24px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px; border-top: 4px solid var(--primary); }
+        .card-green { border-top-color: var(--success); }
+        .card-yellow { border-top-color: var(--warning); }
+        .card-purple { border-top-color: var(--purple); }
+        
+        /* Formularios */
+        input[type="text"], input[type="password"], select { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; }
+        input:focus, select:focus { outline: none; border-color: var(--primary); }
+        
+        /* Botones */
+        .btn { display: inline-block; width: 100%; padding: 10px 15px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-align: center; color: white; font-size: 15px; transition: 0.2s;}
+        .btn-primary { background-color: var(--primary); } .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-success { background-color: var(--success); } .btn-success:hover { background-color: var(--success-hover); }
+        .btn-purple { background-color: var(--purple); } .btn-purple:hover { background-color: var(--purple-hover); }
+        .btn-text { background: transparent; color: var(--text-light); text-decoration: underline; width: auto; padding: 5px; }
+        
+        /* Layout */
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media(min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .login-wrapper { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
+        .login-box { width: 100%; max-width: 400px; }
+        
+        /* Textos */
+        .text-center { text-align: center; }
+        .text-danger { color: var(--danger); } .text-success { color: var(--success); font-weight: bold;}
+        .text-primary { color: var(--primary); font-weight: bold;} .text-muted { color: var(--text-light); font-size: 0.85rem; }
+        hr { border: 0; border-top: 1px solid var(--border); margin: 20px 0; }
+        
+        /* Listas */
+        .list-item { border: 1px solid var(--border); padding: 12px; border-radius: 6px; margin-bottom: 10px; background: #fafafa; display: flex; justify-content: space-between; align-items: center; }
+        .btn-small-danger { background: transparent; color: var(--danger); border: none; cursor: pointer; font-weight: bold; }
+        .radio-label { display: block; padding: 10px; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 5px; cursor: pointer; }
+        .radio-label:hover { background-color: #f3e8ff; }
+    </style>
+</head>
+<body>
+
+    <div id="loginSection" class="login-wrapper">
+        <div class="card login-box">
+            <h1 class="text-center text-primary">Sistema de Quiz</h1>
+            <input type="text" id="username" placeholder="Usuario (admin o santiago)">
+            <input type="password" id="password" placeholder="Contraseña">
+            <button onclick="login()" class="btn btn-primary">Entrar al Sistema</button>
+            <p id="loginError" class="text-danger text-center hidden" style="margin-top: 15px;">Credenciales incorrectas</p>
+        </div>
+    </div>
+
+    <div id="mainSection" class="hidden container">
+        
+        <header class="card flex-between" style="border-top: none; margin-bottom: 20px;">
+            <div>
+                <h2>Usuario: <span id="userDisplay" class="text-primary uppercase"></span></h2>
+                <p>Mi Mejor Puntaje: <span id="scoreDisplay" class="text-success">0</span> pts</p>
+            </div>
+            <div style="text-align: right;">
+                <button onclick="iniciarJuego()" class="btn btn-purple mb-1" style="width: auto;">🎮 Jugar Cuestionario</button>
+                <br>
+                <button onclick="logout()" class="btn-text text-danger">Cerrar Sesión</button>
+            </div>
+        </header>
+
+        <div id="gestionSection" class="grid-2">
+            
+            <div id="adminPanel" class="hidden card">
+                <h3>Añadir Pregunta (Solo Admin)</h3>
+                <input type="text" id="nuevaPre" placeholder="Escribe la pregunta manualmente...">
+                <input type="text" id="op1" placeholder="Opción 1">
+                <input type="text" id="op2" placeholder="Opción 2">
+                <input type="text" id="op3" placeholder="Opción 3">
+                <select id="correcta">
+                    <option value="0">La correcta es la Opción 1</option>
+                    <option value="1">La correcta es la Opción 2</option>
+                    <option value="2">La correcta es la Opción 3</option>
+                </select>
+                <button onclick="guardarPregunta()" class="btn btn-primary">Guardar Manualmente</button>
+                
+                <hr>
+                
+                <h3 style="color: var(--success);"> Importar desde API (OpenTDB)</h3>
+                <p class="text-muted mb-3">Obtiene preguntas de computación en inglés. (Tiene respaldo local por si falla el internet).</p>
+                <button onclick="importarDeAPI()" class="btn btn-success">⬇ Extraer  Preguntas de la API</button>
+                <p id="apiLoading" class="text-success text-center hidden mt-3">Conectando con la API...</p>
+            </div>
+
+            <div class="card card-yellow">
+                <h3>🏆 Tabla de Clasificación</h3>
+                <div id="rankingContainer">
+                    <p class="text-muted text-center">Cargando posiciones...</p>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: 1 / -1; max-height: 400px; overflow-y: auto;">
+                <h3>Banco de Preguntas Actual</h3>
+                <div id="preguntasContainer"></div>
+            </div>
+        </div>
+
+        <div id="juegoSection" class="hidden card card-purple" style="max-width: 600px; margin: 0 auto;">
+            <h2 class="text-center" style="color: var(--purple);">Responde el Cuestionario</h2>
+            <div id="quizContainer" style="margin-bottom: 20px;"></div>
+            <button onclick="calificarJuego()" class="btn btn-purple">Enviar Respuestas</button>
+            <div class="text-center mt-3">
+                <button onclick="volverGestion()" class="btn-text">Cancelar y Volver al panel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let currentUser = null;
+        let currentQuestions = [];
+
+        async function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            try {
+                const res = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, password: pass })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    currentUser = data.user.username;
+                    document.getElementById('loginSection').classList.add('hidden');
+                    document.getElementById('mainSection').classList.remove('hidden');
+                    document.getElementById('userDisplay').innerText = currentUser;
+                    document.getElementById('scoreDisplay').innerText = data.user.puntaje;
+                    
+                    if (currentUser === 'admin') document.getElementById('adminPanel').classList.remove('hidden');
+                    else document.getElementById('adminPanel').classList.add('hidden');
+
+                    cargarPreguntas();
+                    cargarRanking();
+                } else { document.getElementById('loginError').classList.remove('hidden'); }
+            } catch (err) { alert("Error: Verifica que tu servidor 'node server.js' esté encendido."); }
+        }
+
+        async function cargarRanking() {
+            try {
+                const res = await fetch(`${API_URL}/usuarios`);
+                let usuarios = await res.json();
+                usuarios.sort((a, b) => b.puntaje - a.puntaje);
+                
+                document.getElementById('rankingContainer').innerHTML = usuarios.map((u, index) => `
+                    <div class="list-item" style="${u.username === currentUser ? 'border-color: var(--warning); background-color: #fefce8;' : ''}">
+                        <span>${index + 1}. <b>${u.username}</b></span>
+                        <span class="text-success">${u.puntaje} pts</span>
+                    </div>
+                `).join('');
+            } catch (err) { console.error(err); }
+        }
+
+        async function cargarPreguntas() {
+            try {
+                const res = await fetch(`${API_URL}/preguntas`);
+                currentQuestions = await res.json();
+                const container = document.getElementById('preguntasContainer');
+                
+                if (currentQuestions.length === 0) {
+                    container.innerHTML = '<p class="text-muted text-center">No hay preguntas registradas.</p>';
+                    return;
+                }
+                
+                container.innerHTML = currentQuestions.map(p => {
+                    const botonBorrar = (currentUser === 'admin') ? `<button onclick="eliminarPregunta(${p.id})" class="btn-small-danger">Borrar</button>` : '';
+                    return `
+                    <div class="list-item">
+                        <div>
+                            <p style="margin: 0 0 5px 0;"><b>${p.pregunta}</b></p>
+                            <p class="text-muted" style="margin: 0 0 5px 0;">Opciones: ${p.opciones.join(' | ')}</p>
+                            <p class="text-success" style="margin: 0; font-size: 13px;">Correcta: ${p.opciones[p.correcta]}</p>
+                        </div>
+                        <div>${botonBorrar}</div>
+                    </div>`;
+                }).join('');
+            } catch (err) { console.error(err); }
+        }
+
+        async function guardarPregunta() {
+            const pregunta = document.getElementById('nuevaPre').value;
+            const op1 = document.getElementById('op1').value; const op2 = document.getElementById('op2').value; const op3 = document.getElementById('op3').value;
+            
+            if(!pregunta || !op1 || !op2 || !op3) return alert("Llena todos los campos requeridos");
+
+            await fetch(`${API_URL}/preguntas`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ pregunta, opciones: [op1, op2, op3], correcta: parseInt(document.getElementById('correcta').value) })
+            });
+            
+            document.getElementById('nuevaPre').value = ''; document.getElementById('op1').value = ''; document.getElementById('op2').value = ''; document.getElementById('op3').value = '';
+            cargarPreguntas();
+        }
+
+        async function eliminarPregunta(id) {
+            if(confirm("¿Seguro que deseas borrar esta pregunta?")) {
+                await fetch(`${API_URL}/preguntas/${id}`, { method: 'DELETE' });
+                cargarPreguntas();
+            }
+        }
+
+        async function importarDeAPI() {
+            document.getElementById('apiLoading').classList.remove('hidden');
+            try {
+                const res = await fetch(`${API_URL}/importar`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) { alert(data.msg); cargarPreguntas(); }
+                else { alert("Hubo un error al procesar la API."); }
+            } catch (err) { alert("Error de red: No se pudo conectar con el servidor."); } 
+            finally { document.getElementById('apiLoading').classList.add('hidden'); }
+        }
+
+        function iniciarJuego() {
+            if(currentQuestions.length === 0) return alert("No hay preguntas en el banco para jugar.");
+            document.getElementById('gestionSection').classList.add('hidden');
+            document.getElementById('juegoSection').classList.remove('hidden');
+            
+            document.getElementById('quizContainer').innerHTML = currentQuestions.map((p, index) => `
+                <div style="margin-bottom: 20px;">
+                    <p><b>${index + 1}. ${p.pregunta}</b></p>
+                    ${p.opciones.map((op, i) => `
+                        <label class="radio-label">
+                            <input type="radio" name="pregunta_${p.id}" value="${i}"> ${op}
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        async function calificarJuego() {
+            let correctas = 0;
+            currentQuestions.forEach(p => {
+                const seleccionada = document.querySelector(`input[name="pregunta_${p.id}"]:checked`);
+                if (seleccionada && parseInt(seleccionada.value) === p.correcta) correctas += 10;
+            });
+
+            const res = await fetch(`${API_URL}/puntaje`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username: currentUser, puntos: correctas })
+            });
+            const data = await res.json();
+            
+            if (correctas >= data.nuevoPuntaje && correctas > 0) alert(`¡Felicidades! Hiciste ${correctas} puntos. ¡NUEVO RÉCORD! 🏆`);
+            else alert(`Hiciste ${correctas} puntos. Tu récord sigue siendo ${data.nuevoPuntaje} pts.`);
+
+            document.getElementById('scoreDisplay').innerText = data.nuevoPuntaje;
+            cargarRanking(); volverGestion();
+        }
+
+        function volverGestion() { document.getElementById('juegoSection').classList.add('hidden'); document.getElementById('gestionSection').classList.remove('hidden'); }
+        function logout() { location.reload(); }
+    </script>
+</body>
+</html>
